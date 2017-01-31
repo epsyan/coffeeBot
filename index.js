@@ -5,7 +5,7 @@ const credentials = require('./credentials.json');
 const moment = require('moment');
 
 const bot = new SlackBot({
-    token: credentials.appiKey,
+    token: credentials.apiKey,
     name: 'My Bot'
 });
 
