@@ -1,3 +1,4 @@
+"use strict";
 const fs = require('fs');
 const SlackBot = require('slackbots');
 const picks = require('./picks');
@@ -80,5 +81,5 @@ function printStats() {
 
 
 function postMsg(msg) {
-  return bot.postMessageToChannel('test-channel', msg, params);
+  return bot.postMessageToGroup('coffie-chat', msg, params);
 }
