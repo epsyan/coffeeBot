@@ -22,7 +22,7 @@ class Picks {
 
 			this._chosenOne = sortedFilteredList[chosenIndex];
 
-			cb(this.list[0]); // return removed from lottery user
+			cb(this._list[0]); // return removed from lottery user
 		});
 	}
 
