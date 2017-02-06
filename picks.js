@@ -14,8 +14,14 @@ class Picks {
 
 	getRandomUser(cb) {
 		this.readList(() => {
-
-			const sortedFilteredList = this._list.filter((man, i) => i !== 0); // remove person who make coffee last time
+			// remove person who make coffee last time
+			// make lottery between top-3-weight men
+			const sortedFilteredList = (
+				this._list
+					.filter((man, i) => i !== 0)
+					.sort((a, b) => a.w > b.w)
+					.filter((man, i, arr) => (i >= arr.length - 3))
+			);
 			const intervals = sortedFilteredList.reduce((res, man, i) => [...res, i === 0 ? man.w : man.w + res[i-1]], []);
 			const rand = Math.floor(Math.random() * intervals[intervals.length - 1]);
 			const chosenIndex = intervals.reduce((res, item, i) => (res === -1 && rand <= item) ? i : res, -1);
