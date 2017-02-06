@@ -105,7 +105,7 @@ function printStats() {
 }
 
 function postMsg(msg) {
-	return bot.postMessageToChannel(
+/*	return bot.postMessageToChannel(
 		'test-channel',
 		msg,
 		{
@@ -113,5 +113,13 @@ function postMsg(msg) {
 			icon_emoji: ':coffee:'
 		}
 	);
-  // return bot.postMessageToGroup('coffie-chat', msg, params);
+*/
+   return bot.postMessageToGroup(
+	'coffie-chat',
+	 msg,
+	 {
+		username: 'coffieBot',
+		icon_emoji: ':coffee:'
+         }
+);
 }
