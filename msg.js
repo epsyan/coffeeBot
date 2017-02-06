@@ -9,7 +9,7 @@ module.exports = (key, params) => {
 					'*stats* - show stats in format like: _name_ | _coffeeMakeCounter_ | _lastMakeAt_ .';
 
 		case 'timeForCoffee':
-			return `Time for coffee! <${params[0]} you are the chosen one. \n ${params[1]} (_${params[2]} was excluded from lottery cos he made coffee last time_)`;
+			return `Time for coffee! <@${params[0]}> you are the chosen one. \n ${params[1]} (_${params[2]} was excluded from lottery cos he made coffee last time_)`;
 
 		case 'chosenOneCantSave':
 			return 'Chosen one can\'t save stats. Let someone else type "ok" command to me.';
