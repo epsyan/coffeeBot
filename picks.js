@@ -34,7 +34,7 @@ class Picks {
 
 	saveNewStats(cb) {
 		if (this.chosenOne) {
-			const lastMakeAt = new moment().valueOf();
+			const lastMakeAt = new moment().subtract(1, 'h')valueOf();
 			this._list = this._list
 				.map(man => (man.name === this.chosenOne.name ? Object.assign(man, {w: man.w - 1, lastMakeAt }) : man) );
 
