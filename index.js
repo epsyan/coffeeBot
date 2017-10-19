@@ -4,6 +4,7 @@ const SlackBot = require('slackbots');
 const picks = require('./picks');
 const credentials = require('./credentials.json');
 const moment = require('moment');
+const rightPad = require('right-pad');
 const msg = require('./msg');
 
 const bot = new SlackBot({
@@ -39,7 +40,9 @@ bot.on('message', (message) => {
 		case 'help':
 			postMsg(msg('help'));
 		break;
-
+		case 'ẑopa?':
+			postMsg('Bez kavy vam ẑopa');
+		break;
 		default:
 		  postMsg(msg('dontUnderstand'))
     }
@@ -82,6 +85,7 @@ function rollStatistically(num) {
 
 			const statsStr = Object.keys(stats).reduce((res, key) => res + key + ': ' + stats[key] + '\n', '');
 			postMsg(statsStr);
+			picks.resetChosenOne();
 		});
 
 }
@@ -91,7 +95,10 @@ function agreeWithRoll(user) {
 		if (slackUser.name === picks.chosenOne.name) {
 			postMsg(msg('chosenOneCantSave'));
 		} else {
-			picks.saveNewStats(() => postMsg('Stats saved'));
+			picks.saveNewStats(() => {
+				postMsg('Stats saved');
+				printStats();
+			});
 		}
 	});
 }
@@ -99,12 +106,13 @@ function agreeWithRoll(user) {
 function printStats() {
 	picks.readList(() => {
 		postMsg(
-			picks.list.reduce((res, man) => `${res} \n ${man.name} | ${100 - man.w} | ${man.lastMakeAt ? moment(man.lastMakeAt).format('LLL') : 'Never'}`, "")
+			picks.list.reduce((res, man, i) => `${res}${i ? `\n` : ''}${rightPad(man.name, 16, ' ')} | ${100 - man.w} | ${man.lastMakeAt ? moment(man.lastMakeAt).format('LLL') : 'Never'} ${man.isPaused ? '| on vacation' : ''}`, "```")+'```',
+			'full'
 		);
 	});
 }
 
-function postMsg(msg) {
+function postMsg(msg, parse) {
 /*	return bot.postMessageToChannel(
 		'test-channel',
 		msg,
@@ -112,13 +120,15 @@ function postMsg(msg) {
 			username: 'coffieBot',
 			icon_emoji: ':coffee:'
 		}
-	);*/
+	);
+*/
 	return bot.postMessageToGroup(
 		'coffie-chat',
 		msg,
 		{
 			username: 'coffieBot',
-			icon_emoji: ':coffee:'
+			icon_emoji: ':coffee:',
+			parse: parse || 'none'
 		}
 	);
 }

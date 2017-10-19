@@ -18,6 +18,7 @@ class Picks {
 			// make lottery between top-3-weight men
 			const sortedFilteredList = (
 				this._list
+					.filter(man => !man.isPaused)
 					.filter((man, i) => i !== 0)
 					.sort((a, b) => a.w > b.w)
 					.filter((man, i, arr) => (i >= arr.length - 3))
@@ -34,7 +35,7 @@ class Picks {
 
 	saveNewStats(cb) {
 		if (this.chosenOne) {
-			const lastMakeAt = new moment().subtract(1, 'h')valueOf();
+			const lastMakeAt = new moment().valueOf();
 			this._list = this._list
 				.map(man => (man.name === this.chosenOne.name ? Object.assign(man, {w: man.w - 1, lastMakeAt }) : man) );
 
@@ -48,6 +49,10 @@ class Picks {
 				}
 			);
 		}
+	}
+
+	resetChosenOne() {
+		this._chosenOne = null;
 	}
 
 	get chosenOne() {
