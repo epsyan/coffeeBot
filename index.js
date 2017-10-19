@@ -6,6 +6,8 @@ const credentials = require('./credentials.json');
 const moment = require('moment');
 const rightPad = require('right-pad');
 const msg = require('./msg');
+const rp = require('request-promise-native');
+const cheerio = require('cheerio');
 
 const bot = new SlackBot({
     token: credentials.apiKey,
@@ -42,6 +44,7 @@ bot.on('message', (message) => {
 		break;
 		case 'ẑopa?':
 			postMsg('Bez kavy vam ẑopa');
+
 		break;
 		default:
 		  postMsg(msg('dontUnderstand'))
@@ -98,6 +101,20 @@ function agreeWithRoll(user) {
 			picks.saveNewStats(() => {
 				postMsg('Stats saved');
 				printStats();
+				rp('http://nv.ua')
+					.then((page) => {
+						const $ = cheerio.load(page);
+						const links = $('.lenta_holder.active > div > a > strong');
+						postMsg(
+							links.slice(0,5)
+								.map((i, link) => ({
+									link: link.parent.attribs.href.includes('http') ? link.parent.attribs.href : `http://nv.ua${link.parent.attribs.href}`,
+									text: link.children[0].data
+								}))
+								.get()
+								.reduce((res, link) => `${res} \n <${link.link}|${link.text}>`, 'While the coffee is preparing, get ready to discuss these news:')
+						)
+					});
 			});
 		}
 	});
@@ -113,7 +130,7 @@ function printStats() {
 }
 
 function postMsg(msg, parse) {
-/*	return bot.postMessageToChannel(
+	return bot.postMessageToChannel(
 		'test-channel',
 		msg,
 		{
@@ -121,7 +138,7 @@ function postMsg(msg, parse) {
 			icon_emoji: ':coffee:'
 		}
 	);
-*/
+
 	return bot.postMessageToGroup(
 		'coffie-chat',
 		msg,
