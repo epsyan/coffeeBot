@@ -130,14 +130,14 @@ function printStats() {
 }
 
 function postMsg(msg, parse) {
-	return bot.postMessageToChannel(
+/*	return bot.postMessageToChannel(
 		'test-channel',
 		msg,
 		{
 			username: 'coffieBot',
 			icon_emoji: ':coffee:'
 		}
-	);
+	);*/
 
 	return bot.postMessageToGroup(
 		'coffie-chat',
