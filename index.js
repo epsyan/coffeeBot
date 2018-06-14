@@ -19,7 +19,7 @@ const bot = new SlackBot({
 bot.on('start', () => { console.log('started') });
 
 bot.on('message', (message) => {
-  if (message.type === 'message' && message.text.includes('<@U3Y9DSLJJ>')) {
+  if (message.type === 'message' && message.text &&  message.text.includes('<@U3Y9DSLJJ>')) {
     let cmd = message.text.slice(12).replace(/\s/g, '');
     // console.log(cmd);
     // console.log(msg);
@@ -123,7 +123,7 @@ function agreeWithRoll(user) {
 function printStats() {
 	picks.readList(() => {
 		postMsg(
-			picks.list.reduce((res, man, i) => `${res}${i ? `\n` : ''}${rightPad(man.name, 16, ' ')} | ${100 - man.w} | ${man.lastMakeAt ? moment(man.lastMakeAt).format('LLL') : 'Never'} ${man.isPaused ? '| on vacation' : ''}`, "```")+'```',
+			picks.list.reduce((res, man, i) => `${res}${i ? `\n` : ''}${rightPad(man.name, 16, ' ')} | ${200 - man.w} | ${man.lastMakeAt ? moment(man.lastMakeAt).format('LLL') : 'Never'} ${man.isPaused ? '| on vacation' : ''}`, "```")+' \nTotal: -20 cups```',
 			'full'
 		);
 	});
