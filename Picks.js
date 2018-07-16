@@ -1,7 +1,7 @@
-"use strict";
 const fs = require('fs');
 const moment = require('moment');
 
+// TODO refactor this shit.
 class Picks {
 
 	readList(cb) {
@@ -9,7 +9,7 @@ class Picks {
 			if (err) throw err;
 			this._list = JSON.parse(list).sort((a, b) => a.lastMakeAt < b.lastMakeAt);
 			cb();
-		})
+		});
 	}
 
 	getRandomUser(cb) {
@@ -37,7 +37,7 @@ class Picks {
 		if (this.chosenOne) {
 			const lastMakeAt = new moment().valueOf();
 			this._list = this._list
-				.map(man => (man.name === this.chosenOne.name ? Object.assign(man, {w: man.w - 1, lastMakeAt }) : man) );
+				.map(man => (man.name === this.chosenOne.name ? Object.assign(man, { w: man.w - 1, lastMakeAt }) : man) );
 
 			fs.writeFile(
 				`${__dirname}/picks.json`,
@@ -49,6 +49,26 @@ class Picks {
 				}
 			);
 		}
+	}
+
+	saveList (list, cb = () => null) {
+		fs.writeFile(
+			`${__dirname}/picks.json`,
+			JSON.stringify(list),
+			(err) => {
+				if (err) throw err;
+				cb();
+			}
+		);
+	}
+
+	changeVacation(username, cb) {
+		this.readList(() => {
+			const newList = (
+				this._list.map((user) => user.name === username ? { ...user, isPaused: !user.isPaused } : user )
+			);
+			this.saveList(newList, cb);
+		});
 	}
 
 	resetChosenOne() {
