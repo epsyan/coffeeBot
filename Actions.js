@@ -147,6 +147,6 @@ module.exports = class Actions {
 			}
 		];
 
-		return this.bot.postMessageToChannel(...config);
+		return this.bot.postTo(...config);
 	}
 };
