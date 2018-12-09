@@ -9,7 +9,7 @@ class News {
 		const newsIndex = Math.floor(Math.random() * (max - min + 1)) + min;
 
 		return (
-			rp(News.newsSources[newsIndex])
+			rp(News.newsSources[newsIndex], { followRedirect: false })
 				.then((page) => {
 					const $ = cheerio.load(page);
 					const links = $('.lenta_holder.active > div > a > strong');
