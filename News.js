@@ -9,17 +9,20 @@ class News {
 		const newsIndex = Math.floor(Math.random() * (max - min + 1)) + min;
 
 		return (
-			rp(News.newsSources[newsIndex], { followRedirect: false })
+			rp(News.newsSources[newsIndex])
 				.then((page) => {
 					const $ = cheerio.load(page);
-					const links = $('.lenta_holder.active > div > a > strong');
+					const containers = $('.flex-wrap .atom__text__main');
 
 					return (
-						links.slice(0,5)
-							.map((i, link) => ({
-								link: link.parent.attribs.href.includes('http') ? link.parent.attribs.href : `http://nv.ua${link.parent.attribs.href}`,
-								text: link.children[0].data
-							}))
+						containers
+							.slice(0, 5)
+							.map((i, container) => {
+								return {
+									text: ($(container).find('.red').text() + $(container).find('a').text()).replace(/\s{2,}/g, ' ').trim(),
+									link: $(container).find('a').attr('href')
+								};
+							})
 							.get()
 							.reduce((res, link) => `${res} \n <${link.link}|${link.text}>`, '')
 					);
