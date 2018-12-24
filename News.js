@@ -19,7 +19,7 @@ class News {
 							.slice(0, 5)
 							.map((i, container) => {
 								return {
-									text: ($(container).find('.red').text() + $(container).find('a').text()).replace(/\s{2,}/g, ' ').trim(),
+									text: (/*$(container).find('.red').text() + */$(container).find('a').text()).replace(/\s{2,}/g, ' ').trim(),
 									link: $(container).find('a').attr('href')
 								};
 							})
